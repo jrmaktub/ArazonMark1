@@ -46,7 +46,7 @@ describe("Arazon", () => {
     })
 
     it("returns item attributes", async () => {
-      const items = await arazon.items(1)
+      const item = await arazon.items(1)
       expect(item.id).to.equal(1)
     })
   })

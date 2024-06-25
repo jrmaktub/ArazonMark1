@@ -24,14 +24,14 @@ contract Arazon {
     function list(
         uint256 _id,
         string memory _name,
-        string memory _category
+        string memory _category,
         string memory _image,
         uint256 _cost,
         uint256 _rating,
         uint256 _stock
     ) public {
         //create Item struct
-        Item memory item = Item(_id, _name, _category, _image, _cost, _rating, _stock)
+        Item memory item = Item(_id, _name, _category, _image, _cost, _rating, _stock);
 
         //save Item struct to blockchain
         items[_id] = item;
