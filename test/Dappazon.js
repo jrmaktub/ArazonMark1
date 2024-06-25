@@ -7,10 +7,12 @@ const tokens = (n) => {
 describe("Arazon", () => {
 
   let arazon
+  let deployer, buyer
 
   beforeEach(async () => {
     //Setup Accounts
-    console.log(await ethers.getSigners())
+    [deployer, buyer] = await ethers.getSigners()
+    console.log(deployer.address, buyer.address)
 
     //Deploy
     const Arazon = await ethers.getContractFactory("Arazon")
@@ -19,12 +21,34 @@ describe("Arazon", () => {
   })
 
   describe("Deployment", () => {
+    it("Sets the owner", async () => {
+      expect(await arazon.owner()).to.equal(deployer.address)
+    })
+  })
 
-    it('has a name', async() =>{
+  describe("Listing", () => {
 
-      expect(await arazon.name()).to.equal("Arazon")
+    let transaction 
+
+    beforeEach(async () => {
+      transaction = await arazon.connect(deployer).list(
+        1,
+        "Shoes",
+        "Clothing",
+        "IMAGE",
+        1,
+        4,
+        5
+      )
+
+      await transaction.wait()
+
     })
 
+    it("returns item attributes", async () => {
+      const items = await arazon.items(1)
+      expect(item.id).to.equal(1)
+    })
   })
 
 
