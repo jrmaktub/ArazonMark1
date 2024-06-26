@@ -16,6 +16,19 @@ contract Arazon {
 
     mapping(uint256 => Item) public items;
 
+    //information included in the vennt
+    event List(string name, uint256 cost, uint256 quantity);
+
+    modifier onlyUser() {
+        //require is verified User
+        // require(msg.sender == owner);
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+
     constructor() {
         owner = msg.sender;
     }
@@ -31,11 +44,21 @@ contract Arazon {
         uint256 _stock
     ) public {
         //create Item struct
-        Item memory item = Item(_id, _name, _category, _image, _cost, _rating, _stock);
+        Item memory item = Item(
+            _id,
+            _name,
+            _category,
+            _image,
+            _cost,
+            _rating,
+            _stock
+        );
 
         //save Item struct to blockchain
         items[_id] = item;
 
+        //emit event
+        emit List(_name, _cost, _stock);
     }
 
     //Buy products
