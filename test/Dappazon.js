@@ -38,8 +38,6 @@ describe("Arazon", () => {
 
     let transaction
 
-
-
     beforeEach(async () => {
       transaction = await arazon.connect(deployer).list(
         ID,
@@ -55,7 +53,7 @@ describe("Arazon", () => {
 
     })
 
-    it("returns item attributes", async () => {
+        it("returns item attributes", async () => {
       const item = await arazon.items(ID)
 
       expect(item.id).to.equal(ID)
@@ -70,11 +68,49 @@ describe("Arazon", () => {
     })
 
 
-    it("Emits item attributes", () => {
+
+
+    it("Emits List event", () => {
       expect(transaction).to.emit(arazon, "List")
     })
 
 
+  })
+
+  describe("Buying", () => {
+    let transaction
+
+    beforeEach(async () => {
+      // List a item
+      transaction = await arazon.connect(deployer).list(ID, NAME, CATEGORY, IMAGE, COST, RATING, STOCK)
+      await transaction.wait()
+
+      // Buy a item
+      transaction = await arazon.connect(buyer).buy(ID, { value: COST })
+      await transaction.wait()
+    })
+
+
+    it("Updates buyer's order count", async () => {
+      const result = await arazon.orderCount(buyer.address)
+      expect(result).to.equal(1)
+    })
+
+    it("Adds the order", async () => {
+      const order = await arazon.orders(buyer.address, 1)
+
+      expect(order.time).to.be.greaterThan(0)
+      expect(order.item.name).to.equal(NAME)
+    })
+
+    it("Updates the contract balance", async () => {
+      const result = await ethers.provider.getBalance(arazon.address)
+      expect(result).to.equal(COST)
+    })
+
+    it("Emits Buy event", () => {
+      expect(transaction).to.emit(arazon, "Buy")
+    })
   })
 
 
