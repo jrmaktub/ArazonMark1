@@ -20,13 +20,12 @@ contract Arazon {
     }
 
     mapping(uint256 => Item) public items;
-    mapping(address => uint256)public orderCount;
-    mapping(address =>mapping(uint256 => Order)) public orders;
+    mapping(address => uint256) public orderCount;
+    mapping(address => mapping(uint256 => Order)) public orders;
 
     //information included in the vennt
     event Buy(address buyer, uint256 orderId, uint256 itemId);
     event List(string name, uint256 cost, uint256 quantity);
-    
 
     // modifier onlyUser() {
     //     //require is verified User
@@ -92,13 +91,10 @@ contract Arazon {
         orders[msg.sender][orderCount[msg.sender]] = order;
 
         //substract stock
-        items[_id].stock = item.stock -1;
+        items[_id].stock = item.stock - 1;
 
         //emit event
         emit Buy(msg.sender, orderCount[msg.sender], item.id);
-
-
-
     }
 
     //Withdraw funds
@@ -106,6 +102,4 @@ contract Arazon {
         (bool success, ) = owner.call{value: address(this).balance}("");
         require(success);
     }
-
-    
 }
