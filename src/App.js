@@ -24,8 +24,12 @@ function App() {
   const [clothing, setClothing] = useState(null)
   const [toys, setToys] = useState(null)
 
-  const togglePop = () => {
-    console.log("Toggle pop...")
+  const [item, setItem] = useState(null)
+  const [toggle, setToggle] = useState(null)
+
+  const togglePop = (item) => {
+    setItem(item)
+    toggle ? setToggle(false): setToggle(true)
   }
 
   const loadBlockchainData = async () => {
@@ -82,6 +86,10 @@ function App() {
         </>
 
 
+      )}
+
+      {toggle && (
+        <Product item={item} provider={provider} account={account} arazon={arazon} togglePop={togglePop} />
       )}
 
       
